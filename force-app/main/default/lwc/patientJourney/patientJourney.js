@@ -13,6 +13,7 @@ import { refreshApex } from '@salesforce/apex';
 import userId from '@salesforce/user/Id';
 import getFormSectionByPatientMilestoneTaskIds from '@salesforce/apex/PatientJourneyController.getFormSectionByPatientMilestoneTaskIds';
 import getShipmentDetails from '@salesforce/apex/PatientJourneyController.getShipmentDetails';
+import createCopyOfFile from '@salesforce/apex/PatientJourneyController.createCopyOfFile';
 
 export default class PatientJourney extends LightningElement {
     @api recordId;
@@ -400,8 +401,11 @@ export default class PatientJourney extends LightningElement {
 
     }
 
-    handleUploadFinished(event) {
-        console.log(event.detail);
-
+    async handleUploadFinished(event) {
+        let { files } = event.detail;
+        if (files?.length > 0) {
+            let file = files[0];
+            await createCopyOfFile({ recordId: this.recordId, documentId: file.documentId })
+        }
     }
 }

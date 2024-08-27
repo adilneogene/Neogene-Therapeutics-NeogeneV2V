@@ -137,6 +137,16 @@ public with sharing class PatientJourneyController {
         return aw;
     }
 
+    @AuraEnabled
+    public static void createCopyOfFile(String recordId, String documentId){
+        ContentDocumentLink newLink = new ContentDocumentLink();
+        newLink.ContentDocumentId = documentId;
+        newLink.LinkedEntityId = recordId;
+        newLink.ShareType = 'V'; 
+        newLink.Visibility = 'AllUsers';
+        insert newLink;
+    }
+
     public class AddressWrapper{
         @AuraEnabled
         public Patient_Milestone__c patientMilestone {get;set;}
